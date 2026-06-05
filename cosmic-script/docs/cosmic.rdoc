@@ -1,0 +1,229 @@
+
+[AExample:]
+
+```cosmic
+WORKFLOW daily_ai_news
+
+TRIGGER schedule "0 8 * * *"
+
+AGENT researcher
+
+SEARCH "latest artificial intelligence news"
+
+SAVE results AS news
+
+AGENT analyst
+
+READ news
+
+SUMMARIZE
+
+SAVE summary
+
+AGENT narrator
+
+SPEAK summary
+
+END
+```
+
+Core commands:
+
+```cosmic
+PRINT "Hello World"
+
+SET topic = "AI"
+
+SEARCH topic
+
+SAVE results
+
+READ results
+
+SUMMARIZE
+
+SPEAK summary
+
+WRITE "report.md"
+
+EMAIL "team@example.com"
+
+DEPLOY "production"
+
+END
+```
+
+Conditions:
+
+```cosmic
+IF results > 0
+THEN
+    SUMMARIZE
+ELSE
+    PRINT "No results"
+END
+```
+
+Loops:
+
+```cosmic
+FOR article IN results
+
+    SUMMARIZE article
+
+END
+```
+
+Agents:
+
+```cosmic
+AGENT researcher
+
+SEARCH "AI startups"
+
+AGENT analyst
+
+SUMMARIZE results
+
+AGENT developer
+
+GENERATE code
+```
+
+Memory:
+
+```cosmic
+MEMORY SAVE summary
+
+MEMORY LOAD summary
+
+PRINT summary
+```
+
+Voice Narrator integration:
+
+```cosmic
+READ "report.pdf"
+
+NARRATE
+
+VOICE "en-US-Neural"
+
+EXPORT "report.mp3"
+```
+
+LAMIS integration:
+
+```cosmic
+LISTEN
+
+TRANSCRIBE
+
+ANALYZE
+
+RESPOND
+```
+
+Blockchain integration:
+
+```cosmic
+CHAIN fadaka
+
+GET BALANCE wallet
+
+SEND 10 FDK TO wallet
+```
+
+Browser automation:
+
+```cosmic
+OPEN "https://Aexample.com"
+
+CLICK "#login"
+
+TYPE "#email" "seriki.w.yakub@Aexample.com"
+
+SUBMIT
+```
+
+Repository structure:
+
+```text
+cosmic-script/
+├── lexer/
+├── parser/
+├── runtime/
+├── cli/
+├── sdk/
+├── docs/
+├── examples/
+│   ├── hello.cosmic
+│   ├── research.cosmic
+│   ├── narrator.cosmic
+│   └── deploy.cosmic
+└── tests/
+```
+
+Minimal TypeScript runtime:
+
+```ts
+export class CosmicRuntime {
+  async execute(command: string, args: string[]) {
+    switch (command) {
+      case "PRINT":
+        console.log(args.join(" "));
+        break;
+
+      case "SEARCH":
+        console.log("Searching:", args.join(" "));
+        break;
+
+      case "SPEAK":
+        console.log("Speaking:", args.join(" "));
+        break;
+
+      default:
+        throw new Error(`Unknown command ${command}`);
+    }
+  }
+}
+```
+
+CLI:
+
+```bash
+cosmic run workflow.cosmic
+```
+
+Examples:
+
+```bash
+cosmic run daily_news.cosmic
+cosmic run deploy.cosmic
+cosmic run podcast.cosmic
+cosmic run blockchain.cosmic
+```
+
+The first milestone should be very small:
+
+```cosmic
+PRINT "Hello Cosmic"
+
+SEARCH "AI"
+
+SUMMARIZE
+
+SPEAK
+```
+
+Once that works, add:
+
+1. Variables (`SET`)
+2. Conditions (`IF`)
+3. Loops (`FOR`)
+4. Agents (`AGENT`)
+5. Memory (`MEMORY`)
+6. Tool plugins (`SEARCH`, `VOICE`, `CHAIN`, `BROWSER`)
+7. Multi-agent orchestration
+
+> At that point, **Cosmic Script** becomes a true workflow language for QUBUHUB, Cosmic, LAMIS, Voice Narrator, and future Aura Ecosystem services, focused on orchestrating AI-powered processes rather than building traditional applications.
