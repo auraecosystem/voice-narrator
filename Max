@@ -1,0 +1,4 @@
+[write myData.jxf]    [read myData.jxf]
+
+       |                     |
+  [jit.matrix 4 char 320 240]
