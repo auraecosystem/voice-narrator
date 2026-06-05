@@ -1,7 +1,7 @@
 import numpy as np
 import struct
 import os
-
+ 
 def write_jxf(filename, matrix_data):
     """
     Writes a NumPy array directly into a valid Cycling '74 JXF file.
