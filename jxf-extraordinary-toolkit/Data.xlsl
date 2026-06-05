@@ -1,0 +1,8 @@
+jxf-extraordinary-toolkit/
+├── python/
+│   ├── generator.py      # Generates 3D shapes & ML arrays to JXF
+│   └── requirements.txt  # Python dependencies
+├── max/
+│   ├── jxf_synth.maxpat  # The core visual/audio engine
+│   └── data/             # Target folder for generated JXF files
+└── README.md             # Setup instructions
