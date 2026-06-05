@@ -1,0 +1,11 @@
+[message: generate chaos]    [message: generate dna]
+             \                   /
+              \                 /
+            [node.script generator.js]
+             /                      \
+      [route bang]               [print status]
+
+           |
+   [bang triggers reload]
+           |
+ [read data/chaos_cloud.jxf]
