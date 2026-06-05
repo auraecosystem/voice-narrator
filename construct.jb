@@ -1,0 +1,52 @@
+typedef struct _jit_foo
+{
+   t_jit_object    ob;
+   float          myval;
+} t_jit_foo;
+static t_jit_class *_jit_foo_class=NULL;
+t_jit_err jit_foo_init(void)
+{
+   long attrflags=0;
+   t_jit_object *attr;
+   // create new class named "jit_foo" with constructor + destructor
+   _jit_foo_class = jit_class_new("jit_foo",(method)jit_foo_new,
+      (method)jit_foo_free, sizeof(t_jit_foo), 0L);
+   // add method to class
+   jit_class_addmethod(jit_foo_scream, "scream", A_DEFLONG, 0L);
+   // define attribute
+   attr = jit_object_new(      // instantiate an object
+      _jit_sym_jit_attr_offset,   // of class jit_attr_offset
+      "myval",         // with name "myval"
+      _jit_sym_float32,       // type float32
+      attrflags,         // default flags
+      (method)0L,         // default getter accessor
+      (method)0L,         // default setter accessor
+      calcoffset(t_jit_foo,myval)); // byte offset to struct member
+   // add attribute object to class
+   jit_class_addattr(_jit_foo_class, attr);
+   // register class
+   jit_class_register(_jit_foo_class);
+   return JIT_ERR_NONE;
+}
+// constructor
+t_jit_foo *jit_foo_new(void)
+{
+   t_jit_foo *x;
+   // allocate object
+   if (x=jit_object_alloc(_jit_foo_class))
+   {
+      // if successful, perform any initialization
+      x->myval = 0;
+   }
+   return x;
+}
+// destructor
+void jit_foo_free(t_jit_foo *x)
+{
+   // would free any necessary resources here
+}
+// scream method
+void jit_foo_scream(t_jit_foo *x, long i)
+{
+   post("MY VALUE IS %f! AND MY ARGUMENT IS %d", x->myval, i);
+}
