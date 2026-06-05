@@ -66,7 +66,7 @@ def generate_lorenz_attractor(num_points=10000):
     # Normalize data between -1.0 and 1.0 for easy GPU rendering
     coords = np.vstack((xs, ys, zs)).T
     coords /= np.max(np.abs(coords))
-    
+
     # Reshape to a 100x100 2D grid with 3 planes (X, Y, Z)
     matrix_3d = coords.reshape((100, 100, 3)).astype(np.float32)
     return matrix_3d
