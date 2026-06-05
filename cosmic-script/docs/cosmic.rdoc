@@ -164,7 +164,7 @@ cosmic-script/
 └── tests/
 ```
 
-Minimal TypeScript runtime:
+l
 
 ```ts
 export class CosmicRuntime {
@@ -227,3 +227,1850 @@ Once that works, add:
 7. Multi-agent orchestration
 
 > At that point, **Cosmic Script** becomes a true workflow language for QUBUHUB, Cosmic, LAMIS, Voice Narrator, and future Aura Ecosystem services, focused on orchestrating AI-powered processes rather than building traditional applications.
+
+want **KerboScript first**,  Cosmic Script . 
+We build **Cosmic Script later**, but first we copy the *thinking model* of KerboScript.
+
+---
+
+## What KerboScript actually gives you (important)
+
+KerboScript is not “rocket code”.
+
+It is:
+
+> A **state + control loop language for a machine in a physics world**
+
+Meaning:
+
+* You read state (altitude, speed)
+* You decide logic (when to stop, turn, throttle)
+* You execute actions (burn, stage, steer)
+* You repeat in loops until conditions are met
+
+That pattern is EXACTLY what you need for Cosmic.
+
+---
+
+## Step 1: Your “Kerbo-style Core” (Cosmic Kernel v0)
+
+Start with ONLY 6 commands:
+
+```text
+PRINT
+SET
+IF
+WAIT
+WHILE
+DO
+```
+
+That’s it. No agents yet.
+
+---
+
+## Step 2: Minimal working language (first build)
+
+### Example script
+
+```cosmic
+SET fuel = 100
+
+PRINT "Launching system..."
+
+WHILE fuel > 0 DO
+    PRINT "Engine running"
+    SET fuel = fuel - 10
+    WAIT 1
+END
+
+PRINT "Shutdown complete"
+```
+
+This already teaches:
+
+* state
+* loop
+* execution cycle
+
+---
+
+## Step 3: Add “spacecraft-style control thinking”
+
+Now we introduce KerboScript-style control logic:
+
+```cosmic
+SET altitude = 0
+SET speed = 0
+
+PRINT "Launch sequence start"
+
+WHILE altitude < 10000 DO
+    SET speed = speed + 50
+    SET altitude = altitude + speed
+
+    PRINT altitude
+    WAIT 1
+END
+
+PRINT "Target reached"
+```
+
+This is literally KerboScript logic, just generalized.
+
+---
+
+## Step 4: Your runtime (VERY SIMPLE ENGINE)
+
+This is your first interpreter:
+
+```ts
+class CosmicKernel {
+  variables: Record<string, any> = {};
+
+  execute(script: string) {
+    const lines = script.split("\n").map(l => l.trim());
+
+    for (let line of lines) {
+      const [cmd, ...rest] = line.split(" ");
+
+      switch (cmd) {
+        case "PRINT":
+          console.log(rest.join(" ").replace(/"/g, ""));
+          break;
+
+        case "SET":
+          const [name, , value] = rest;
+          this.variables[name] = Number(value) || value;
+          break;
+
+        default:
+          console.log("Unknown:", line);
+      }
+    }
+  }
+}
+```
+
+---
+
+## Step 5: Why this matters for  ecosystem
+
+This kernel becomes the base of:
+
+* Cosmic Script (later AI orchestration)
+* QUBUHUB automation flows
+* LAMIS agent control
+* Voice Narrator pipelines
+* Blockchain automation scripts
+
+But right now, it is just:
+
+> A deterministic execution engine
+
+Same philosophy as KerboScript.
+
+---
+
+## Step 6: Your roadmap (clean and real)
+
+### Phase 1 — Kerbo Core (NOW)
+
+* PRINT
+* SET
+* IF
+* WHILE
+
+### Phase 2 — Machine control layer
+
+* sensors (mock data)
+* timers
+* loops
+* state machine
+
+### Phase 3 — Tool layer
+
+* SEARCH
+* SPEAK
+* FETCH
+* SAVE
+
+### Phase 4 — AI layer (Cosmic Script)
+
+* AGENT
+* WORKFLOW
+* MEMORY
+* CHAIN
+
+---
+
+## The real insight (important)
+
+KerboScript teaches this:
+
+> “Programming is controlling a system over time under changing state.”
+
+Cosmic Script will evolve that into:
+
+> “Programming is controlling intelligence systems over time.”
+
+---
+
+> ## @lamis nano next step
+
+build for you:
+
+1. Full repo structure (Kerbo-core)
+2. Working CLI (`cosmic run file.cosmic`)
+3. Parser (AST version, not string split)
+4. IF + WHILE engine (real logic)
+5. Transition plan → Cosmic Script AI layer
+
+ Yes. If you're serious about turning this into a real component of Cosmic or QUBUHUB, start with a dedicated repository. Keeping the language/runtime separate makes it much easier to evolve and integrate later.
+
+A good structure would be:
+
+```text
+cosmic-script/
+├── README.md
+├── LICENSE
+├── docs/
+├── examples/
+│   ├── hello.cosmic
+│   ├── research.cosmic
+│   └── voice.cosmic
+├── packages/
+│   ├── lexer/
+│   ├── parser/
+│   ├── runtime/
+│   └── cli/
+├── tests/
+└── package.json
+```
+
+First create the repository:
+
+```bash
+git init cosmic-script
+cd cosmic-script
+npm init -y
+```
+
+Install TypeScript:
+
+```bash
+npm install -D typescript ts-node @types/node
+npx tsc --init
+```
+
+Create your first script:
+
+**examples/hello.cosmic**
+
+```text
+PRINT "Hello Cosmic"
+```
+
+Create a minimal interpreter:
+
+**src/index.ts**
+
+```typescript
+import fs from "fs";
+
+const script = fs.readFileSync(
+  process.argv[2],
+  "utf8"
+);
+
+for (const line of script.split("\n")) {
+  const cmd = line.trim();
+
+  if (cmd.startsWith("PRINT")) {
+    const text = cmd.replace("PRINT", "").trim();
+    console.log(text.replace(/"/g, ""));
+  }
+}
+```
+
+Run:
+
+```bash
+npx ts-node src/index.ts examples/hello.cosmic
+```
+
+Output:
+
+```text
+Hello Cosmic
+```
+
+Then add commands one by one:
+
+```cosmic
+PRINT "Starting"
+
+SEARCH "AI news"
+
+SUMMARIZE results
+
+SPEAK summary
+```
+
+Later, connect them to your actual systems:
+
+```text
+PRINT       -> Console
+SEARCH      -> Search service
+SUMMARIZE   -> GPT model
+SPEAK       -> Voice Narrator
+MEMORY      -> QUBUHUB memory
+CHAIN       -> Blockchain tools
+AGENT       -> Cosmic agents
+```
+
+Repository naming ideas:
+
+* `cosmic-script`
+* `cosmic-lang`
+* `cosmicdsl`
+* `cosmic-runtime`
+* `cosmic-flow`
+
+For your ecosystem, I'd probably choose:
+
+**Cosmic Script**
+
+with:
+
+```text
+Repository: cosmic-script
+Extension: .cosmic
+Runtime: cosmic
+CLI: cosmic run workflow.cosmic
+```
+
+That gives you a clear path:
+
+1. Create repo.
+2. Build lexer.
+3. Build parser.
+4. Build runtime.
+5. Add AI/voice/blockchain plugins.
+6. Integrate into Cosmic and QUBUHUB.
+
+ A repo with a CLI that can execute `PRINT "Hello Cosmic"` is enough to establish the language and start iterating.
+
+Yes. If you're serious about turning this into a real component of Cosmic or QUBUHUB, start with a dedicated repository. Keeping the language/runtime separate makes it much easier to evolve and integrate later.
+
+A good structure would be:
+
+```text
+cosmic-script/
+├── README.md
+├── LICENSE
+├── docs/
+├── examples/
+│   ├── hello.cosmic
+│   ├── research.cosmic
+│   └── voice.cosmic
+├── packages/
+│   ├── lexer/
+│   ├── parser/
+│   ├── runtime/
+│   └── cli/
+├── tests/
+└── package.json
+```
+
+First create the repository:
+
+```bash
+git init cosmic-script
+cd cosmic-script
+npm init -y
+```
+
+Install TypeScript:
+
+```bash
+npm install -D typescript ts-node @types/node
+npx tsc --init
+```
+
+Create your first script:
+
+**examples/hello.cosmic**
+
+```text
+PRINT "Hello Cosmic"
+```
+
+Create a minimal interpreter:
+
+**src/index.ts**
+
+```typescript
+import fs from "fs";
+
+const script = fs.readFileSync(
+  process.argv[2],
+  "utf8"
+);
+
+for (const line of script.split("\n")) {
+  const cmd = line.trim();
+
+  if (cmd.startsWith("PRINT")) {
+    const text = cmd.replace("PRINT", "").trim();
+    console.log(text.replace(/"/g, ""));
+  }
+}
+```
+
+Run:
+
+```bash
+npx ts-node src/index.ts examples/hello.cosmic
+```
+
+Output:
+
+```text
+Hello Cosmic
+```
+
+Then add commands one by one:
+
+```cosmic
+PRINT "Starting"
+
+SEARCH "AI news"
+
+SUMMARIZE results
+
+SPEAK summary
+```
+
+Later, connect them to your actual systems:
+
+```text
+PRINT       -> Console
+SEARCH      -> Search service
+SUMMARIZE   -> GPT model
+SPEAK       -> Voice Narrator
+MEMORY      -> QUBUHUB memory
+CHAIN       -> Blockchain tools
+AGENT       -> Cosmic agents
+```
+
+Repository naming ideas:
+
+* `cosmic-script`
+* `cosmic-lang`
+* `cosmicdsl`
+* `cosmic-runtime`
+* `cosmic-flow`
+
+For your ecosystem, I'd probably choose:
+
+**Cosmic Script**
+
+with:
+
+```text
+Repository: cosmic-script
+Extension: .cosmic
+Runtime: cosmic
+CLI: cosmic run workflow.cosmic
+```
+
+That gives you a clear path:
+
+1. Create repo.
+2. Build lexer.
+3. Build parser.
+4. Build runtime.
+5. Add AI/voice/blockchain plugins.
+6. Integrate into Cosmic and QUBUHUB.
+
+You do not need a large codebase on day one. A repo with a CLI that can execute `PRINT "Hello Cosmic"` is enough to establish the language and start iterating.
+
+version of **Cosmic Script**, I'd define the language around workflows, agents, tools, memory, scheduling, and automation.
+
+Example:
+
+```cosmic
+WORKFLOW daily_ai_news
+
+TRIGGER schedule "0 8 * * *"
+
+AGENT researcher
+
+SEARCH "latest artificial intelligence news"
+
+SAVE results AS news
+
+AGENT analyst
+
+READ news
+
+SUMMARIZE
+
+SAVE summary
+
+AGENT narrator
+
+SPEAK summary
+
+END
+```
+
+Core commands:
+
+```cosmic
+PRINT "Hello World"
+
+SET topic = "AI"
+
+SEARCH topic
+
+SAVE results
+
+READ results
+
+SUMMARIZE
+
+SPEAK summary
+
+WRITE "report.md"
+
+EMAIL "team@example.com"
+
+DEPLOY "production"
+
+END
+```
+
+Conditions:
+
+```cosmic
+IF results > 0
+THEN
+    SUMMARIZE
+ELSE
+    PRINT "No results"
+END
+```
+
+Loops:
+
+```cosmic
+FOR article IN results
+
+    SUMMARIZE article
+
+END
+```
+
+Agents:
+
+```cosmic
+AGENT researcher
+
+SEARCH "AI startups"
+
+AGENT analyst
+
+SUMMARIZE results
+
+AGENT developer
+
+GENERATE code
+```
+
+Memory:
+
+```cosmic
+MEMORY SAVE summary
+
+MEMORY LOAD summary
+
+PRINT summary
+```
+
+Voice Narrator integration:
+
+```cosmic
+READ "report.pdf"
+
+NARRATE
+
+VOICE "en-US-Neural"
+
+EXPORT "report.mp3"
+```
+
+LAMIS integration:
+
+```cosmic
+LISTEN
+
+TRANSCRIBE
+
+ANALYZE
+
+RESPOND
+```
+
+Blockchain integration:
+
+```cosmic
+CHAIN fadaka
+
+GET BALANCE wallet
+
+SEND 10 FDK TO wallet2
+```
+
+Browser automation:
+
+```cosmic
+OPEN "https://example.com"
+
+CLICK "#login"
+
+TYPE "#email" "user@example.com"
+
+SUBMIT
+```
+
+Repository structure:
+
+```text
+cosmic-script/
+├── lexer/
+├── parser/
+├── runtime/
+├── cli/
+├── sdk/
+├── docs/
+├── examples/
+│   ├── hello.cosmic
+│   ├── research.cosmic
+│   ├── narrator.cosmic
+│   └── deploy.cosmic
+└── tests/
+```
+
+Minimal TypeScript runtime:
+
+```ts
+export class CosmicRuntime {
+  async execute(command: string, args: string[]) {
+    switch (command) {
+      case "PRINT":
+        console.log(args.join(" "));
+        break;
+
+      case "SEARCH":
+        console.log("Searching:", args.join(" "));
+        break;
+
+      case "SPEAK":
+        console.log("Speaking:", args.join(" "));
+        break;
+
+      default:
+        throw new Error(`Unknown command ${command}`);
+    }
+  }
+}
+```
+
+CLI:
+
+```bash
+cosmic run workflow.cosmic
+```
+
+Examples:
+
+```bash
+cosmic run daily_news.cosmic
+cosmic run deploy.cosmic
+cosmic run podcast.cosmic
+cosmic run blockchain.cosmic
+```
+
+The first milestone should be very small:
+
+```cosmic
+PRINT "Hello Cosmic"
+
+SEARCH "AI"
+
+SUMMARIZE
+
+SPEAK
+```
+
+Once that works, add:
+
+1. Variables (`SET`)
+2. Conditions (`IF`)
+3. Loops (`FOR`)
+4. Agents (`AGENT`)
+5. Memory (`MEMORY`)
+6. Tool plugins (`SEARCH`, `VOICE`, `CHAIN`, `BROWSER`)
+7. Multi-agent orchestration
+
+At that point, **Cosmic Script** becomes a true workflow language for QUBUHUB, Cosmic, LAMIS, Voice Narrator, and future Aura Ecosystem services, focused on orchestrating AI-powered processes rather than building traditional applications.
+
+Yes. If the goal is to bring the **KerboScript idea** into Cosmic/QUBUHUB, I'd recommend creating a simple AI automation DSL rather than copying KerboScript itself.
+
+For example, a workflow file:
+
+```cosmic
+AGENT researcher
+SEARCH "latest AI news"
+
+AGENT analyst
+SUMMARIZE result
+
+AGENT narrator
+SPEAK summary
+```
+
+A minimal parser in JavaScript:
+
+```javascript
+class CosmicRuntime {
+  async execute(script) {
+    const lines = script
+      .split("\n")
+      .map(l => l.trim())
+      .filter(Boolean);
+
+    for (const line of lines) {
+      const [command, ...args] = line.split(" ");
+
+      switch (command) {
+        case "SEARCH":
+          console.log("Searching:", args.join(" "));
+          break;
+
+        case "SUMMARIZE":
+          console.log("Summarizing...");
+          break;
+
+        case "SPEAK":
+          console.log("Speaking:", args.join(" "));
+          break;
+
+        default:
+          console.log("Unknown command:", command);
+      }
+    }
+  }
+}
+
+const runtime = new CosmicRuntime();
+
+runtime.execute(`
+SEARCH "latest AI news"
+SUMMARIZE result
+SPEAK summary
+`);
+```
+
+A more powerful syntax:
+
+```cosmic
+SET topic = "Artificial Intelligence"
+
+SEARCH topic
+
+IF results > 0
+THEN
+    SUMMARIZE results
+    SPEAK summary
+END
+```
+
+Basic TypeScript lexer:
+
+```typescript
+export enum TokenType {
+  COMMAND,
+  STRING,
+  IDENTIFIER,
+  EOF
+}
+
+export interface Token {
+  type: TokenType;
+  value: string;
+}
+```
+
+Runtime architecture:
+
+```text
+.cosmic file
+      │
+      ▼
+ Lexer
+      │
+      ▼
+ Parser
+      │
+      ▼
+ AST
+      │
+      ▼
+ Cosmic Runtime
+      │
+      ├── LAMIS
+      ├── Voice Narrator
+      ├── Search Engine
+      ├── Blockchain Tools
+      ├── Web Automation
+      └── Agent Network
+```
+
+Example agent workflow:
+
+```cosmic
+AGENT researcher
+
+SEARCH "Bitcoin ETF news"
+
+SAVE findings
+
+AGENT analyst
+
+READ findings
+
+SUMMARIZE
+
+AGENT narrator
+
+SPEAK summary
+```
+
+Example execution engine:
+
+```javascript
+const commands = {
+  SEARCH: async (q) => {
+    console.log("Search:", q);
+  },
+
+  SUMMARIZE: async () => {
+    console.log("Summary generated");
+  },
+
+  SPEAK: async (text) => {
+    console.log("Voice:", text);
+  }
+};
+```
+
+This gives you a foundation for a `.cosmic` scripting language where users can automate AI agents, voice services, blockchain actions, searches, and workflows in a human-readable format. From there, you can add variables, loops, conditions, functions, memory, and multi-agent coordination.
+Yes. If the goal is to bring the **KerboScript idea** into Cosmic/QUBUHUB, I'd recommend creating a simple AI automation DSL rather than copying KerboScript itself.
+
+For example, a workflow file:
+
+```cosmic
+AGENT researcher
+SEARCH "latest AI news"
+
+AGENT analyst
+SUMMARIZE result
+
+AGENT narrator
+SPEAK summary
+```
+
+A minimal parser in JavaScript:
+
+```javascript
+class CosmicRuntime {
+  async execute(script) {
+    const lines = script
+      .split("\n")
+      .map(l => l.trim())
+      .filter(Boolean);
+
+    for (const line of lines) {
+      const [command, ...args] = line.split(" ");
+
+      switch (command) {
+        case "SEARCH":
+          console.log("Searching:", args.join(" "));
+          break;
+
+        case "SUMMARIZE":
+          console.log("Summarizing...");
+          break;
+
+        case "SPEAK":
+          console.log("Speaking:", args.join(" "));
+          break;
+
+        default:
+          console.log("Unknown command:", command);
+      }
+    }
+  }
+}
+
+const runtime = new CosmicRuntime();
+
+runtime.execute(`
+SEARCH "latest AI news"
+SUMMARIZE result
+SPEAK summary
+`);
+```
+
+A more powerful syntax:
+
+```cosmic
+SET topic = "Artificial Intelligence"
+
+SEARCH topic
+
+IF results > 0
+THEN
+    SUMMARIZE results
+    SPEAK summary
+END
+```
+
+Basic TypeScript lexer:
+
+```typescript
+export enum TokenType {
+  COMMAND,
+  STRING,
+  IDENTIFIER,
+  EOF
+}
+
+export interface Token {
+  type: TokenType;
+  value: string;
+}
+```
+
+Runtime architecture:
+
+```text
+.cosmic file
+      │
+      ▼
+ Lexer
+      │
+      ▼
+ Parser
+      │
+      ▼
+ AST
+      │
+      ▼
+ Cosmic Runtime
+      │
+      ├── LAMIS
+      ├── Voice Narrator
+      ├── Search Engine
+      ├── Blockchain Tools
+      ├── Web Automation
+      └── Agent Network
+```
+
+Example agent workflow:
+
+```cosmic
+AGENT researcher
+
+SEARCH "Bitcoin ETF news"
+
+SAVE findings
+
+AGENT analyst
+
+READ findings
+
+SUMMARIZE
+
+AGENT narrator
+
+SPEAK summary
+```
+
+Example execution engine:
+
+```javascript
+const commands = {
+  SEARCH: async (q) => {
+    console.log("Search:", q);
+  },
+
+  SUMMARIZE: async () => {
+    console.log("Summary generated");
+  },
+
+  SPEAK: async (text) => {
+    console.log("Voice:", text);
+  }
+};
+```
+
+This gives you a foundation for a `.cosmic` scripting language where users can automate AI agents, voice services, blockchain actions, searches, and workflows in a human-readable format. From there, you can add variables, loops, conditions, functions, memory, and multi-agent coordination.
+
+
+In the context of your projects—QUBUHUB, Cosmic, LAMIS, Voice Narrator, and your automation ecosystem—the value of KerboScript is not the language itself. The valuable part is the **control model**.
+
+KerboScript teaches a pattern:
+
+```text
+Sensor Data
+    ↓
+Decision Logic
+    ↓
+Actions
+    ↓
+Feedback
+    ↓
+Repeat
+```
+
+That's exactly how many AI agents and automation systems work.
+
+For example, in Cosmic:
+
+```text
+User Request
+    ↓
+AI Agent
+    ↓
+Tool Selection
+    ↓
+Execute Action
+    ↓
+Observe Result
+    ↓
+Next Action
+```
+
+In LAMIS:
+
+```text
+Microphone
+    ↓
+Speech-to-Text
+    ↓
+GPT-5 Reasoning
+    ↓
+Action
+    ↓
+Voice Response
+```
+
+In Voice Narrator:
+
+```text
+Document
+    ↓
+Text Extraction
+    ↓
+Narration Pipeline
+    ↓
+Audio Output
+```
+
+A KerboScript-style automation language for QUBUHUB could look like:
+
+```text
+WHEN user_message RECEIVED
+THEN analyze_intent
+
+IF intent = "search"
+THEN web_search
+
+IF intent = "summarize"
+THEN generate_summary
+
+IF intent = "speak"
+THEN voice_narrator
+```
+
+Or as a workflow:
+
+```yaml
+name: news-assistant
+
+trigger:
+  event: user_request
+
+steps:
+  - search_web
+  - extract_content
+  - summarize
+  - narrate
+```
+
+That is essentially "KerboScript for AI agents."
+
+For Cosmic specifically, you could build a lightweight orchestration language:
+
+```text
+AGENT researcher
+SEARCH "latest AI news"
+
+AGENT analyst
+SUMMARIZE result
+
+AGENT narrator
+SPEAK summary
+```
+
+Then Cosmic becomes an operating system for agents rather than rockets.
+
+The strongest takeaway from KerboScript for your ecosystem is not aerospace. It is the idea that complex behavior can be expressed as simple, readable commands. That same principle could power:
+
+* AI agent workflows in Cosmic
+* Automation pipelines in Aura Ecosystem
+* Multi-agent coordination in LAMIS
+* Voice-driven task execution in QUBUHUB
+* Autonomous research and reporting in Pudteeth
+
+In other words, KerboScript's real relevance to your work is as inspiration for a domain-specific language (DSL) that controls AI agents, tools, workflows, and services the same way KerboScript controls a spacecraft. That could become a distinctive feature of your platform.
+
+KerboScript itself is essentially limited to the kOS mod inside Kerbal Space Program. You generally cannot use KerboScript directly outside that environment.
+
+However, the concepts you learn from KerboScript are useful in many real-world areas:
+
+* Robotics
+* Drone autopilots
+* Satellite operations
+* Aerospace software
+* Industrial automation
+* AI agents
+* Embedded systems
+
+For example, a KerboScript command:
+
+```kerboscript
+LOCK THROTTLE TO 1.
+```
+
+is conceptually similar to code in a real drone controller:
+
+```python
+drone.set_throttle(1.0)
+```
+
+or a robot:
+
+```python
+motor.speed = 100
+```
+
+The skills transfer, even though the language does not.
+
+If you're interested in real-world equivalents, these are commonly used:
+
+| Area             | Languages              |
+| ---------------- | ---------------------- |
+| AI agents        | Python, JavaScript     |
+| Robotics         | Python, C++, ROS       |
+| Drones           | C++, Python            |
+| Space systems    | C, C++, Python         |
+| Automation       | Python, Go, JavaScript |
+| Embedded devices | C, C++, Rust           |
+
+For someone building AI and automation projects, learning Python would give you far more practical reach than KerboScript. Python can be used for:
+
+* AI assistants
+* Computer vision
+* Robotics
+* Web APIs
+* Blockchain tools
+* Automation workflows
+
+KerboScript is best viewed as a fun way to learn programming and automation logic through virtual spacecraft. The mindset—"write code to control a machine"—is exactly the same mindset used in real aerospace and robotics engineering.
+
+Think of KerboScript as **code that flies a rocket for you** inside the game Kerbal Space Program.
+
+Normally in the game, you manually:
+
+* Press the launch button
+* Increase throttle
+* Turn the rocket
+* Enter orbit
+
+With KerboScript, you write instructions once, and the computer does it automatically.
+
+For example:
+
+```kerboscript
+PRINT "Hello World".
+```
+
+This simply displays:
+
+```text
+Hello World
+```
+
+Another example:
+
+```kerboscript
+STAGE.
+```
+
+This is like pressing the rocket's launch button.
+
+And:
+
+```kerboscript
+LOCK THROTTLE TO 1.
+```
+
+means:
+
+```text
+Set engine power to 100%
+```
+
+A simple sequence:
+
+```kerboscript
+PRINT "Launching".
+LOCK THROTTLE TO 1.
+STAGE.
+```
+
+means:
+
+1. Show "Launching"
+2. Set engines to full power
+3. Launch the rocket
+
+It's very similar to giving a robot pilot instructions:
+
+```text
+Robot:
+1. Start engines
+2. Go up
+3. Stop at 10 km
+```
+
+written as code:
+
+```kerboscript
+STAGE.
+
+UNTIL ALTITUDE > 10000 {
+    WAIT 0.1.
+}
+
+LOCK THROTTLE TO 0.
+```
+
+Translation:
+
+```text
+Launch.
+Keep flying upward.
+When altitude reaches 10,000 meters,
+turn off the engines.
+```
+
+So KerboScript is not a general programming language like JavaScript or Python. It's a specialized language whose job is to control spacecraft automatically inside Kerbal Space Program. Think of it as an autopilot programming language for virtual rockets.
+
+
+KerboScript is a scripting language used by the kOS (Kerbal Operating System) mod for the video game Kerbal Space Program.
+
+It allows you to write programs that control spacecraft automatically, similar to how real aerospace software controls rockets and satellites.
+
+With KerboScript, you can:
+
+* Launch rockets automatically
+* Perform gravity turns
+* Circularize orbits
+* Dock spacecraft
+* Land on planets and moons
+* Create reusable launch systems
+* Build autonomous probes
+
+Example:
+
+```kerboscript
+PRINT "Launching!".
+
+STAGE.
+
+UNTIL SHIP:ALTITUDE > 10000 {
+    LOCK THROTTLE TO 1.
+    WAIT 0.1.
+}
+
+PRINT "Reached 10km altitude".
+```
+
+Common features include:
+
+```kerboscript
+SET x TO 10.
+PRINT x.
+
+LOCK THROTTLE TO 1.
+LOCK STEERING TO UP.
+
+STAGE.
+```
+
+KerboScript supports:
+
+* Variables
+* Loops
+* Functions
+* Mathematical calculations
+* Vessel telemetry
+* Orbital mechanics
+* Autopilot control
+
+A simple launch sequence might look like:
+
+```kerboscript
+LOCK THROTTLE TO 1.
+LOCK STEERING TO HEADING(90,90).
+
+STAGE.
+
+WAIT UNTIL APOAPSIS > 80000.
+
+LOCK THROTTLE TO 0.
+```
+
+Conceptually:
+
+```text
+KerboScript
+    ↓
+kOS Processor
+    ↓
+Rocket Controls
+    ↓
+Kerbal Space Program Physics Engine
+```
+
+If you're familiar with Python, JavaScript, or Lua, KerboScript is relatively easy to learn. It was designed specifically for spaceflight automation inside Kerbal Space Program and is widely used by players interested in programming, aerospace engineering, and autonomous mission design.
+
+In the WebAuthn example, the **RP ID (Relying Party ID)** must be a domain that you actually control and on which the WebAuthn code is running.
+
+Examples:
+
+```javascript
+rp: {
+  name: "Aexample",
+  id: "aexample.com"
+}
+```
+
+or
+
+```javascript
+rp: {
+  name: "You",
+  id: "you.com"
+}
+```
+
+However, you cannot simply choose `you.com` unless you own or operate that domain. WebAuthn enforces domain matching.
+
+For example:
+
+| Website URL                                          | Valid RP ID                      |
+| ---------------------------------------------------- | -------------------------------- |
+| [https://aexample.com](https://aexample.com)         | aexample.com                     |
+| [https://app.aexample.com](https://app.aexample.com) | aexample.com or app.aexample.com |
+| [https://you.com](https://you.com)                   | you.com                          |
+| [https://auth.you.com](https://auth.you.com)         | you.com or auth.you.com          |
+| [http://localhost](http://localhost)                 | localhost                        |
+
+If QUBUHUB were hosted at:
+
+```text
+https://qubuhub.com
+```
+
+you would use:
+
+```javascript
+rp: {
+  name: "QUBUHUB",
+  id: "qubuhub.com"
+}
+```
+
+If it were hosted at:
+
+```text
+https://auth.qubuhub.com
+```
+
+you could use either:
+
+```javascript
+id: "qubuhub.com"
+```
+
+or
+
+```javascript
+id: "auth.qubuhub.com"
+```
+
+depending on whether you want credentials shared across subdomains.
+
+The key rule is:
+
+> The RP ID must match the website's domain (or a parent domain), and the browser verifies this during registration and login.
+
+So `aexample.com` and `you.com` are valid examples syntactically, but they only work if the application is actually served from those domains and you control them.
+
+In the WebAuthn example, the **RP ID (Relying Party ID)** must be a domain that you actually control and on which the WebAuthn code is running.
+
+Examples:
+
+```javascript
+rp: {
+  name: "Aexample",
+  id: "aexample.com"
+}
+```
+
+or
+
+```javascript
+rp: {
+  name: "You",
+  id: "you.com"
+}
+```
+
+However, you cannot simply choose `you.com` unless you own or operate that domain. WebAuthn enforces domain matching.
+
+For example:
+
+| Website URL                                          | Valid RP ID                      |
+| ---------------------------------------------------- | -------------------------------- |
+| [https://aexample.com](https://aexample.com)         | aexample.com                     |
+| [https://app.aexample.com](https://app.aexample.com) | aexample.com or app.aexample.com |
+| [https://you.com](https://you.com)                   | you.com                          |
+| [https://auth.you.com](https://auth.you.com)         | you.com or auth.you.com          |
+| [http://localhost](http://localhost)                 | localhost                        |
+
+If QUBUHUB were hosted at:
+
+```text
+https://qubuhub.com
+```
+
+you would use:
+
+```javascript
+rp: {
+  name: "QUBUHUB",
+  id: "qubuhub.com"
+}
+```
+
+If it were hosted at:
+
+```text
+https://auth.qubuhub.com
+```
+
+you could use either:
+
+```javascript
+id: "qubuhub.com"
+```
+
+or
+
+```javascript
+id: "auth.qubuhub.com"
+```
+
+depending on whether you want credentials shared across subdomains.
+
+The key rule is:
+
+> The RP ID must match the website's domain (or a parent domain), and the browser verifies this during registration and login.
+
+So `aexample.com` and `you.com` are valid examples syntactically, but they only work if the application is actually served from those domains and you control them.
+
+If you want to adapt that WebAuthn example for QUBUHUB, you would replace the relying party (RP) information and user information with your branding and actual user data.
+
+Example:
+
+```javascript
+const createCredentialArgs = {
+  publicKey: {
+    rp: {
+      name: "QUBUHUB",
+      id: "qubuhub.com", // your domain
+    },
+
+    user: {
+      id: crypto.getRandomValues(new Uint8Array(16)),
+      name: "user@qubuhub.com",
+      displayName: "Seriki Yakub",
+    },
+
+    challenge: crypto.getRandomValues(new Uint8Array(32)),
+
+    pubKeyCredParams: [
+      {
+        type: "public-key",
+        alg: -7, // ES256
+      },
+      {
+        type: "public-key",
+        alg: -257, // RS256
+      },
+    ],
+
+    authenticatorSelection: {
+      residentKey: "preferred",
+      userVerification: "preferred",
+    },
+
+    attestation: "none",
+    timeout: 60000,
+  },
+};
+```
+
+Suggested authentication branding:
+
+```text
+QUBUHUB Passkey
+Secure passwordless authentication
+
+✓ Face ID
+✓ Touch ID
+✓ Windows Hello
+✓ Android Passkeys
+✓ Security Keys (FIDO2)
+✓ Cross-device authentication
+```
+
+For production, the RP ID must match your actual domain:
+
+| Environment       | RP ID              |
+| ----------------- | ------------------ |
+| Production        | `qubuhub.com`      |
+| App               | `app.qubuhub.com`  |
+| Auth Service      | `auth.qubuhub.com` |
+| Local Development | `localhost`        |
+
+Recommended architecture:
+
+```text
+QUBUHUB
+│
+├── Auth Service
+│   ├── WebAuthn
+│   ├── OAuth
+│   ├── JWT
+│   └── Session Manager
+│
+├── User Service
+│
+├── AI Services
+│   ├── LAMIS
+│   ├── Cosmic
+│   ├── Voice Narrator
+│   └── Agents
+│
+└── API Gateway
+```
+
+You could position QUBUHUB as an AI ecosystem platform with passkey-first authentication, eliminating traditional passwords and using WebAuthn as the primary login mechanism. This provides stronger security and a smoother user experience than username/password systems.
+
+This code is a basic example of **WebAuthn (Web Authentication)**, the browser API behind passkeys, security keys, fingerprint login, Face ID, Windows Hello, and FIDO2 authentication.
+
+The flow is:
+
+1. Register a credential (`navigator.credentials.create()`)
+2. Authenticate with that credential (`navigator.credentials.get()`)
+
+During registration:
+
+```javascript
+navigator.credentials.create(createCredentialDefaultArgs)
+```
+
+the browser asks an authenticator (passkey, fingerprint sensor, security key, etc.) to generate:
+
+* A public key
+* A private key
+
+The private key stays on the user's device and is never exposed to JavaScript.
+
+The public key and credential ID should be sent to your backend:
+
+```javascript
+const credential = await navigator.credentials.create(options);
+
+// Send to server
+await fetch("/register", {
+  method: "POST",
+  body: JSON.stringify({
+    id: credential.id,
+    rawId: credential.rawId,
+    response: credential.response
+  })
+});
+```
+
+During login:
+
+```javascript
+navigator.credentials.get(getCredentialDefaultArgs)
+```
+
+the authenticator signs a challenge using the stored private key.
+
+The server then verifies the signature using the public key stored during registration.
+
+Important production issues with your example:
+
+❌ Hardcoded challenge
+
+```javascript
+challenge: new Uint8Array([...]).buffer
+```
+
+Challenges must be generated by the server for every request.
+
+Example in Node.js:
+
+```javascript
+import crypto from "crypto";
+
+const challenge = crypto.randomBytes(32);
+```
+
+❌ Static user ID
+
+```javascript
+user: {
+  id: new Uint8Array(16)
+}
+```
+
+Should be unique per user:
+
+```javascript
+user: {
+  id: crypto.randomBytes(16),
+  name: user.email,
+  displayName: user.fullName
+}
+```
+
+❌ Attestation direct
+
+```javascript
+attestation: "direct"
+```
+
+Most applications use:
+
+```javascript
+attestation: "none"
+```
+
+to improve privacy and compatibility.
+
+Modern passkey-friendly version:
+
+```javascript
+const options = {
+  publicKey: {
+    rp: {
+      name: "Aexample"
+    },
+    user: {
+      id: userIdBytes,
+      name: email,
+      displayName: displayName
+    },
+    challenge: challengeBytes,
+    pubKeyCredParams: [
+      {
+        type: "public-key",
+        alg: -7
+      },
+      {
+        type: "public-key",
+        alg: -257
+      }
+    ],
+    authenticatorSelection: {
+      residentKey: "preferred",
+      userVerification: "preferred"
+    },
+    attestation: "none"
+  }
+};
+```
+
+Architecture:
+
+```text
+Browser
+    │
+    │ WebAuthn API
+    ▼
+Authenticator
+(Face ID / Fingerprint /
+YubiKey / Passkey)
+    │
+    │ signs challenge
+    ▼
+Server
+    │
+    ├─ stores public key
+    └─ verifies signatures
+```
+
+This is the same technology used by companies such as Google, Microsoft, Apple, and GitHub for passwordless authentication.
+
+If you're building QUBUHUB, LAMIS, Cosmic, or another platform, WebAuthn/passkeys are currently one of the strongest authentication approaches because they resist phishing, credential stuffing, and password database leaks.
+
+
+The repository you linked is:
+
+[auraecosystem/cosmic](https://github.com/auraecosystem/cosmic?utm_source=chatgpt.com)
+
+I can't reliably inspect the contents of that specific repository from the information currently available. The repository may be private, recently created, unavailable to indexing services, or not yet indexed by search engines.
+
+If you want a technical review, send one of these:
+
+* Repository description
+* README.md
+* Directory tree (`tree -L 3`)
+* `package.json`, `go.mod`, `Cargo.toml`, or equivalent
+* Main source files
+
+If this Cosmic project is part of your Aura Ecosystem stack, a strong direction would be:
+
+```text
+Cosmic
+├── Core Runtime
+├── AI Agents
+├── Voice Layer
+├── Memory System
+├── Automation Engine
+├── Blockchain Connectors
+├── Web4 Services
+├── Device Integration
+├── Plugin SDK
+└── Developer CLI
+```
+
+Potential positioning:
+
+* Cosmic = orchestration platform
+* LAMIS = multimodal AI runtime
+* Voice Narrator = speech layer
+* Pudteeth = media/news engine
+* QUBUHUB = organization and AI ecosystem hub
+* Aura Ecosystem = automation and infrastructure foundation
+
+That would make Cosmic the control plane that coordinates models, agents, workflows, memory, voice, and blockchain services across your projects.
+
+Paste the repository structure or README and I can provide:
+
+* Architecture review
+* Refactoring suggestions
+* Deployment strategy
+* Documentation rewrite
+* Integration plan with QUBUHUB, LAMIS, and Voice Narrator.
+
+G-code (Geometric Code) is the standard programming language used to control CNC machines, 3D printers, laser cutters, milling machines, lathes, and other computer-controlled manufacturing equipment.
+
+Think of it as a set of instructions that tells a machine:
+
+* Where to move
+* How fast to move
+* When to cut, drill, extrude, or stop
+* Which tool to use
+
+For example:
+
+```gcode
+G21         ; Use millimeters
+G90         ; Absolute positioning
+G0 X0 Y0    ; Move quickly to (0,0)
+G1 X50 Y50 F1000 ; Move while cutting to (50,50)
+M30         ; End program
+```
+
+Common G-code commands:
+
+| Command | Meaning                 |
+| ------- | ----------------------- |
+| G0      | Rapid movement          |
+| G1      | Linear cutting movement |
+| G2      | Clockwise arc           |
+| G3      | Counterclockwise arc    |
+| G20     | Use inches              |
+| G21     | Use millimeters         |
+| G90     | Absolute coordinates    |
+| G91     | Relative coordinates    |
+| M3      | Spindle on              |
+| M5      | Spindle off             |
+| M30     | End program             |
+
+Applications include:
+
+![Image](https://images.openai.com/static-rsc-4/8celFjgv52QgOk6rlbmyzwWl65WM6xmzpIFAhkabZpRH_PMgzmRc0C1DzJF0A0rvRi16j5UWhzqYl6qNmQJMc10yuYmDs-3anRPGB2ao-tM-SEmMML-5UMxtP_jFpS0g86IB9ExdTkLjh93zZ7iY13q1bTH7tbjVKg5Rn_nE7tBFOub_GfzpOB30c6qxT1pi?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/zmZx_JVx8f1bFBNpsLMgGyuo_MH7YsIVdDM1QYhgRNDBmI7CDQu_CK1e5853561n7BO5IncZdMpjxol89pKs3j4tyNIa1f4jDaDPNgIQAA9mSiChuHAoSwjOE6l838A1dxxKF36LwHt0xtuYkxQjPdV7Qs9e4pg4TjdRscuopHRGVIrVxqsvO8YA2mGS0TvY?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/9ZSObGO3ioT9VZ7sONYS03Y6hub98U-G35yZ8BGtPEjQfB4eJWqerrdkSuEL6qmTrk1kFaLsDYuRlxNz8pdK03eptVrpj-deE6nmfiasVIDDSqea062IMTz-oAc7W2_UfUJEhglxE8YmYT84ek8C3L6BHbpEvDiYQUCPpt6s-sPvkKI5rXhI5sSGqgkhtFTK?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/ga37sOtVXg1BwmClEaoFl4Ac0Dm-paZO9lB31xKrrwS4t3uY2IdYGap0nHHKquJp86SvMoIWruuxBEM3c2rJXZJEwH9TKWdyFUkE6c0BqFlM__mG1jNi45qxCN1ici3gYTXO2ZqJr5Lt2Tw7MHWtjkPjQtxlxwxYzIY6rr9bei7C1yf8HNHga_gsm5DHAgoQ?purpose=fullsize)
+
+* 3D printing
+* CNC milling
+* CNC turning (lathes)
+* Laser cutting and engraving
+* Plasma cutting
+* Industrial automation
+
+A simple 3D-printing G-code snippet might look like:
+
+```gcode
+G28
+G1 Z0.2 F3000
+G1 X50 Y50 F1500
+G1 E5
+```
+
+Here the printer homes its axes, moves the nozzle, and extrudes material.
+
+Historically, G-code was developed in the 1950s and became a foundational technology in computer numerical control (CNC), helping automate manufacturing processes that previously required manual operation.
+
+If you're asking because you found a `.gcode`, `.nc`, `.tap`, or `.ck` file, I can help analyze it if you paste its contents.
