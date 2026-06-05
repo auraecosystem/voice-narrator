@@ -1,0 +1,30 @@
+import bpy
+import numpy as np
+
+# Parameters
+radius = 5.0
+pitch = 2.0
+turns = 4.0
+segments = 200
+
+# Math calculation
+c = pitch / (2 * np.pi)
+t_max = turns * 2 * np.pi
+t_values = np.linspace(0, t_max, segments)
+
+# Create curve data
+curve_data = bpy.data.curves.new('HelixCurve', type='CURVE')
+curve_data.dimensions = '3D'
+polyline = curve_data.splines.new('POLY')
+
+# Generate coordinates
+polyline.points.add(segments - 1)
+for i, t in enumerate(t_values):
+    x = radius * np.cos(t)
+    y = radius * np.sin(t)
+    z = c * t
+    polyline.points[i].co = (x, y, z, 1) # (X, Y, Z, Weight)
+
+# Link to scene
+obj = bpy.data.objects.new('HelixObject', curve_data)
+bpy.context.collection.objects.link(obj)
